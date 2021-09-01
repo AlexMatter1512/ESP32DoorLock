@@ -3,7 +3,6 @@
 #include "ESP32Servo.h"
 
 #include <WiFi.h>
-//#include <analogWrite.h>
 
 #include <OTA.h>
 #include <credentials.h> //where "mySSID" and "myPASSWORD" variables are stored.
@@ -14,7 +13,7 @@
 #define RED 33
 
 //WiFi connection
-int att = 0; //tentativi di connettersi al wifi
+int att = 0; //attempts to connect to wifi
 IPAddress staticIP(192, 168, 68, 200);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
@@ -61,7 +60,7 @@ void setup() {
   while ((WiFi.status() != WL_CONNECTED) && (att != 20)) {
     delay(500);
     Serial.println("Connecting to WiFi..");
-    //segnala visivamente che sta tentando di connettersi
+    //led blinks blue at every attempt
     digitalWrite(BLUE, HIGH);
     delay(15);
     digitalWrite(BLUE, LOW);
@@ -74,7 +73,7 @@ void setup() {
     Serial.println("Not Connected to the WiFi network");
   }
 
-  //infrarosso
+  //infrared
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK, USE_DEFAULT_FEEDBACK_LED_PIN); // Start the receiver
 
   //servo
@@ -85,7 +84,7 @@ void setup() {
 void loop() {
   ArduinoOTA.handle();
   
-  //Segnale infrarosso
+  //infrared signal
   if (IrReceiver.decode()) {
     ArduinoOTA.handle();
     translateIR();
@@ -98,7 +97,7 @@ void loop() {
 }
 
 void ButtonPressed(){
-  //Pressione pulsante
+  //Button pressed
   while (digitalRead(button) == LOW) {
     delay (500);
     if (digitalRead(button) == LOW) {
